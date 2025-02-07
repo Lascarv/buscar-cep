@@ -35,8 +35,9 @@ public class Cep extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtCep;
 	private JTextField txtEndereco;
-	private JTextField textField_2;
+	private JTextField txtBairro;
 	private JTextField txtCidade;
+	private JComboBox cboUf;
 
 	/**
 	 * Launch the application.
@@ -91,10 +92,10 @@ public class Cep extends JFrame {
 		txtBai.setBounds(17, 93, 38, 14);
 		contentPane.add(txtBai);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(77, 90, 249, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		txtBairro = new JTextField();
+		txtBairro.setBounds(77, 90, 249, 20);
+		contentPane.add(txtBairro);
+		txtBairro.setColumns(10);
 		
 		JLabel txtCid = new JLabel("Cidade:");
 		txtCid.setBounds(18, 124, 52, 14);
@@ -109,7 +110,7 @@ public class Cep extends JFrame {
 		lblNewLabel_4.setBounds(287, 124, 23, 14);
 		contentPane.add(lblNewLabel_4);
 		
-		JComboBox cboUf = new JComboBox();
+		cboUf = new JComboBox();
 		cboUf.setBackground(new Color(240, 255, 240));
 		cboUf.setForeground(UIManager.getColor("CheckBox.foreground"));
 		cboUf.setModel(new DefaultComboBoxModel(new String[] {"", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
@@ -167,12 +168,24 @@ public class Cep extends JFrame {
 			for (Iterator<Element> it = root.elementIterator(); it.hasNext();) {
 		        Element element = it.next();
 		        if (element.getQualifiedName().equals("cidade")) {
-					txtCidade.setText(element.getText());
-		        	
+					txtCidade.setText(element.getText());		        	
 		        }
-		     }
-		        	
-		} catch (Exception e) {
+		        if (element.getQualifiedName().equals("bairro")) {
+					txtBairro.setText(element.getText());		        	
+		        }
+		        if (element.getQualifiedName().equals("uf")) {
+		        	cboUf.setSelectedItem(element.getText());
+		        }
+		        if (element.getQualifiedName().equals("tipo_logradouro")) {
+		        	tipoLogradouro = element.getText();
+		        }
+		        if (element.getQualifiedName().equals("logradouro")) {
+		        	logradouro = element.getText();
+		        }
+			} 
+			txtEndereco.setText(tipoLogradouro + "" + logradouro);
+		
+			} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
