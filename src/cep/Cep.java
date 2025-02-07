@@ -38,6 +38,7 @@ public class Cep extends JFrame {
 	private JTextField txtBairro;
 	private JTextField txtCidade;
 	private JComboBox cboUf;
+	private JLabel lblStatus;
 
 	/**
 	 * Launch the application.
@@ -118,6 +119,13 @@ public class Cep extends JFrame {
 		contentPane.add(cboUf);
 		
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpar();
+				
+				
+			}
+		});
 		btnLimpar.setBounds(24, 211, 89, 23);
 		contentPane.add(btnLimpar);
 		
@@ -131,7 +139,7 @@ public class Cep extends JFrame {
 				}
 			}
 		});
-		btnCep.setBounds(194, 20, 81, 23);
+		btnCep.setBounds(212, 20, 81, 23);
 		contentPane.add(btnCep);
 		
 		JButton btnSobre = new JButton("");
@@ -151,6 +159,11 @@ public class Cep extends JFrame {
 		
 		/* Uso da biblioteca Atxy2k para validação do campo txtCep */
 		RestrictedTextField validar = new RestrictedTextField (txtCep);
+		
+		lblStatus = new JLabel("");
+		lblStatus.setIcon(new ImageIcon(Cep.class.getResource("/img/326572_check_icon.png")));
+		lblStatus.setBounds(182, 21, 20, 20);
+		contentPane.add(lblStatus);
 		validar.setOnlyNums(true);
 		validar.setLimit(8);
 	} 
@@ -182,11 +195,30 @@ public class Cep extends JFrame {
 		        if (element.getQualifiedName().equals("logradouro")) {
 		        	logradouro = element.getText();
 		        }
+		        if (element.getQualifiedName().equals("resultado")) {
+		        	resultado = element.getText();
+		        	if (resultado.equals("1")) {
+		        		lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/")));
+		        	} else {
+		        		JOptionPane.showMessageDialog(null, "Cep não encontrado");
+		        	}
+		        }
 			} 
-			txtEndereco.setText(tipoLogradouro + "" + logradouro);
+			txtEndereco.setText(tipoLogradouro + " " + logradouro);
 		
 			} catch (Exception e) {
 			System.out.println(e);
 		}
+		
+		
+	}
+	private void limpar() {
+		txtCep.setText(null);
+		txtEndereco.setText(null);
+		txtBairro.setText(null);
+		txtCidade.setText(null);
+		cboUf.setSelectedItem(null);
+		txtCep.requestFocus(null);
+		lblStatus.setIcon(null);
 	}
 }
